@@ -106,13 +106,6 @@ on run {input, parameters}
 				set jsonString to read JSON from curlOutput
 				set outputURL to shortUrl of jsonString
 				
-				tell application "Google Chrome"
-					activate
-					if (count every window) = 0 then
-						make new window
-					end if
-					tell window 1 to make new tab with properties {URL:outputURL}
-				end tell
 				
 				--tell application "Finder" to display dialog outputURL
 				
