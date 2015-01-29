@@ -3,7 +3,7 @@ on run {input, parameters}
 	set theAppKey to "XXX-your-app-key-XXX"
 	set theUserToken to "XXX-your-user-token-XXX"
 	
-	set theBoardTitle to "Inbox Board" -- whatever appropriate name is
+	set theBoardTitle to "Inbox" -- whatever appropriate name is
 	set theListTitle to "To Do"
 	set success to true
 	
