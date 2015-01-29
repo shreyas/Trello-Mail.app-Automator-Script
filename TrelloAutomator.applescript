@@ -31,24 +31,9 @@ on run {input, parameters}
 				set bodyBrief to ((characters 1 thru 800 of theMessageBody) as string)
 			end if
 			
-			repeat with this_char in theSubject
-				if this_char is in the standard_characters then
-					set the_encoded_text to (the_encoded_text & this_char)
-				else
-					set the_encoded_text to (the_encoded_text & "_")
-				end if
-			end repeat
-			set theSubject to the_encoded_text
-			
-			if theMessageId is "" then
-				tell application "Finder" to display dialog "Could not find the message id for the selected message."
-				error 1
-			end if
 			
 			-- creates a URL to the message, sadly it's not working from Chrome.			
-			set message_url to "[" & theSubject & "](message://%3C" & Â
-				theMessageId & Â
-				"%3E" & ")"
+			set message_url to "[" & theSubject & "]"
 			
 			tell application "JSON Helper"
 				set jsonString to fetch JSON from "https://trello.com/1/members/my/boards?key=" & theAppKey & "&token=" & theUserToken
@@ -112,7 +97,7 @@ on run {input, parameters}
 				end if
 				
 				set itemName to theSenderName & ":" & theSubject
-				set itemDesc to message_url & return & theDateReceived & return & bodyBrief & "..."
+				set itemDesc to theDateReceived & return & return & bodyBrief & "..."
 				
 				set curlPostCmd to "curl -s -X POST"
 				set curlURL to "https://api.trello.com/1/lists/" & listId & "/cards"
