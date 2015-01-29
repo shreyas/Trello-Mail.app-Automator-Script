@@ -25,21 +25,11 @@ on run {input, parameters}
 				set theSenderName to (extract name from it)
 			end tell
 			
-			if length of theMessageBody < 80 then
+			if length of theMessageBody < 800 then
 				set bodyBrief to theMessageBody
 			else
-				set bodyBrief to ((characters 1 thru 80 of theMessageBody) as string)
+				set bodyBrief to ((characters 1 thru 800 of theMessageBody) as string)
 			end if
-			set the_encoded_text to ""
-			repeat with this_char in bodyBrief
-				if this_char is in the standard_characters then
-					set the_encoded_text to (the_encoded_text & this_char)
-				else
-					-- can't figure out real encoding so just replace characters that we can't deal with using underscores
-					set the_encoded_text to (the_encoded_text & "_")
-				end if
-			end repeat
-			set bodyBrief to the_encoded_text
 			
 			repeat with this_char in theSubject
 				if this_char is in the standard_characters then
