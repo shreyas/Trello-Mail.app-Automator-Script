@@ -25,40 +25,15 @@ on run {input, parameters}
 				set theSenderName to (extract name from it)
 			end tell
 			
-			if length of theMessageBody < 280 then
+			if length of theMessageBody < 800 then
 				set bodyBrief to theMessageBody
 			else
-				set bodyBrief to ((characters 1 thru 280 of theMessageBody) as string)
+				set bodyBrief to ((characters 1 thru 800 of theMessageBody) as string)
 			end if
-			set the_encoded_text to ""
-			repeat with this_char in bodyBrief
-				if this_char is in the standard_characters then
-					set the_encoded_text to (the_encoded_text & this_char)
-				else
-					-- can't figure out real encoding so just replace characters that we can't deal with using underscores
-					set the_encoded_text to (the_encoded_text & "_")
-				end if
-			end repeat
-			set bodyBrief to the_encoded_text
 			
-			set the_encoded_subject to ""
-			repeat with this_char in theSubject
-				if this_char is in the standard_characters then
-					set the_encoded_subject to (the_encoded_subject & this_char)
-				else
-					set the_encoded_subject to (the_encoded_subject & "_")
-				end if
-			end repeat
-			set theSubject to the_encoded_subject
-			
-			if theMessageId is "" then
-				tell application "Finder" to display dialog "Could not find the message id for the selected message."
-				error 1
-			end if
 			
 			-- creates a URL to the message, sadly it's not working from Chrome.			
-			#set message_url to "[" & theSubject & "](message://%3C" & theMessageId & "%3E" & ")"
-			set message_url to "[Link to the Email](message://%3C" & theMessageId & "%3E" & ")"
+			set message_url to "[" & theSubject & "]"
 			
 			tell application "JSON Helper"
 				set jsonString to fetch JSON from "https://trello.com/1/members/my/boards?key=" & theAppKey & "&token=" & theUserToken
@@ -121,8 +96,8 @@ on run {input, parameters}
 					error 5
 				end if
 				
-				set itemName to theSenderName & ": " & theSubject
-				set itemDesc to message_url & return & theDateReceived & return & return & bodyBrief & "..."
+				set itemName to theSenderName & ":" & theSubject
+				set itemDesc to theDateReceived & return & return & bodyBrief & "..."
 				
 				set curlPostCmd to "curl -s -X POST"
 				set curlURL to "https://api.trello.com/1/lists/" & listId & "/cards"
@@ -130,6 +105,7 @@ on run {input, parameters}
 				set curlOutput to do shell script curlPostCmd & " " & curlURL & " " & curlOpts
 				set jsonString to read JSON from curlOutput
 				set outputURL to shortUrl of jsonString
+				
 				
 				--tell application "Finder" to display dialog outputURL
 				
